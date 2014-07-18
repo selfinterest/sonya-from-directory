@@ -15,7 +15,8 @@ describe("fromDirectory provider function", function(){
 
     it("should be a function", function(){
         expect(typeof fromDirectory).toBe("function");
-
     });
+
+
 
 });
