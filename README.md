@@ -39,3 +39,4 @@ sonya.Provide.fromDirectory({
   defaultProvider: "service",
   recursive: true            //if true, then recurse into subdirectories of dir
 });
+```

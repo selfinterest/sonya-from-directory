@@ -1,6 +1,6 @@
 {
   "name": "sonya-from-directory",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "A provider for Sonya that is able to get modules from a directory",
   "main": "./lib/main.js",
   "scripts": {
