@@ -19,6 +19,15 @@ describe("fromDirectoryUtils", function(){
     describe("fromDirectoryUtils.getJavaScriptFilesFromDir", function(){
         var path = require("path");
         var testDir = path.resolve("./tests/server/fixtures");
+        beforeEach(function(){
+           fromDirectoryUtils.options = {
+               recursive: true
+           }
+        });
+
+        afterEach(function(){
+            fromDirectoryUtils.options = {};
+        });
         it("if the directory doesn't exist, it should throw an error", function(){
            expect(function(){
                fromDirectoryUtils.getJavaScriptFilesFromDir("blah");
@@ -45,26 +54,26 @@ describe("fromDirectoryUtils", function(){
         });
 
         it("should be able to recursively get JavaScript files from directory", function(){
-            var files = fromDirectoryUtils.getJavaScriptFilesFromDir(testDir, true);
+            var files = fromDirectoryUtils.getJavaScriptFilesFromDir(testDir);
             expect(files.length).toBeGreaterThan(1);
         });
 
         it("should be able to non-recursively get JavaScript files from directory", function(){
-           var files = fromDirectoryUtils.getJavaScriptFilesFromDir(testDir, false);
+            fromDirectoryUtils.options.recursive = false;
+            var files = fromDirectoryUtils.getJavaScriptFilesFromDir(testDir);
            expect(files.length).toBe(1);
         });
 
-        it("should non-recursively get JavaScript files if no option is specified",  function(){
-            var files = fromDirectoryUtils.getJavaScriptFilesFromDir(testDir);
-            expect(files.length).toBe(1);
-        });
+
 
     });
 
     describe("fromDirectoryUtils.getModulesFromDir", function(){
         var spy, fs, requireSpy, returnFakeFile;
         beforeEach(function(){
-
+           fromDirectoryUtils.options = {
+                recursive: true
+            }
            function fakeModule(){
                return "Senea";
            }
@@ -85,12 +94,12 @@ describe("fromDirectoryUtils", function(){
 
        it("should call on getJavaScriptFilesFromDir", function(){
          fromDirectoryUtils.getModulesFromDir("../");
-         expect(spy).toHaveBeenCalledWith("../", false);
+         expect(spy).toHaveBeenCalledWith("../");
        });
 
        it("should return an array", function(){
          var result = fromDirectoryUtils.getModulesFromDir("../");
-         expect(requireSpy).toHaveBeenCalledWith("someModule.js");
+         expect(requireSpy).toHaveBeenCalledWith("/home/terrence/Code/node/sonya-from-directory/someModule.js");
          expect(Array.isArray(result)).toBe(true);
          expect(result.length).toBe(1);
          expect(typeof result[0]).toBe("function");
@@ -136,17 +145,25 @@ describe("fromDirectoryUtils", function(){
     });
 
     describe("fromDirectoryUtils.setNameAndTypeOfModule", function(){
+        beforeEach(function(){
+            fromDirectoryUtils.options = {
+                recursive: true,
+                useFunctionNames: true,
+                defaultProvider: "factory"
+            }
+        });
+        afterEach(function(){
+           fromDirectoryUtils.options = {};
+        });
         it("should throw an error if no module is passed", function(){
             expect(function(){
                 fromDirectoryUtils.setNameAndTypeOfModule();
             }).toThrow();
         });
 
-        it("should throw an error if module is not a function and getnamesfromfunction is true", function(){
+        it("should throw an error if module is not a function and useFunctionNames is true", function(){
            expect(function(){
-            fromDirectoryUtils.setNameAndTypeOfModule("test", {
-                useFunctionNames: true
-            });
+            fromDirectoryUtils.setNameAndTypeOfModule("test");
            }).toThrow("setNameAndTypeOfModule -- module must be function.");
         });
 
@@ -194,6 +211,16 @@ describe("fromDirectoryUtils", function(){
     });
 
     describe("fromDirectoryUtils.processOneModule", function(){
+        beforeEach(function(){
+            fromDirectoryUtils.options = {
+                recursive: true,
+                useFunctionNames: true,
+                defaultProvider: "factory"
+            }
+        });
+        afterEach(function(){
+            fromDirectoryUtils.options = {};
+        });
         it("should be able to process a module", function(){
             var spy = spyOn(fromDirectoryUtils.Provide, "factory").andCallThrough();
 
@@ -221,6 +248,12 @@ describe("fromDirectoryUtils", function(){
     describe("fromDirectoryUtils.processModules", function(){
         var modules = [];
         beforeEach(function(){
+            fromDirectoryUtils.options = {
+                recursive: true,
+                useFunctionNames: true,
+                defaultProvider: "factory"
+            }
+
             modules = [
                 function fakeModule1(){
                     return "Senea";
@@ -230,9 +263,12 @@ describe("fromDirectoryUtils", function(){
                 }
             ]
         })
+        afterEach(function(){
+            fromDirectoryUtils.options = {};
+        });
         it("should be able to process an array of modules", function(){
           var spy = spyOn(fromDirectoryUtils.Provide, "factory").andCallThrough();
-          fromDirectoryUtils.processModules(modules, {useFunctionNames: true, defaultProvider: "factory"});
+          fromDirectoryUtils.processModules(modules);
           expect(spy).toHaveBeenCalled();
           expect(fromDirectoryUtils.Provide.factory.calls.length).toBe(2);
           var Injector = require("sonya").Injector;

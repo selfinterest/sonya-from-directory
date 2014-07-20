@@ -14,8 +14,31 @@ describe("Sonya main module", function (){
 
     it("should be added to Provide if required before Provide is required", function(){
         require("../../lib/main.js");
+        var provideClass = require("sonya/lib/lib/provide-class.js");
+        expect(typeof provideClass.prototype.types.fromDirectory).toBe("function");
         var Provide = require("sonya/lib/provide.js");
         expect(Provide.fromDirectory).toBeDefined();
+    });
+
+    /*it("should be able to get options", function(){
+       require("../../lib/main.js");
+    });*/
+
+    it("should be able to register providers with the injector", function(){
+       require("../../lib/main.js");
+
+       var sonya = require("sonya");
+       sonya.Provide.fromDirectory({
+           dir: "./tests/server/fixtures",
+           recursive: true,
+           useFunctionNames: true
+       });
+
+
+       sonya.Injector.invoke(function(SeneaFactory, AmalaFactory){
+            expect(SeneaFactory).toBe("Senea");
+            expect(AmalaFactory).toBe("Senea and Amala.");
+       });
     });
 
 });

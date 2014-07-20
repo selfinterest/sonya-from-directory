@@ -1,12 +1,12 @@
 sonya-from-directory
 ====================
 
-A Sonya provider that automatically loads modules from a directory.
+A [Sonya](https://www.npmjs.org/package/sonya) provider that automatically loads modules from a directory.
 
 
 How to Use
 -----------
-Before loading sonya in your project, load sonya-from-directory. The provider will automatically register itself with sonya and be usable like any other provider.
+Before loading Sonya in your project, load sonya-from-directory. The provider will automatically register itself with sonya and be usable like any other provider.
 
 Example
 --------
@@ -36,6 +36,6 @@ var sonya = require("sonya");
 sonya.Provide.fromDirectory({
   dir: "./directory-where-all-my-modules-are",
   useFunctionNames: false,   //if set to false, every module MUST use the $name property.
-  defaultProvider: "service"
+  defaultProvider: "service",
+  recursive: true            //if true, then recurse into subdirectories of dir
 });
-
