@@ -16,8 +16,9 @@ describe("Sonya main module", function (){
         require("../../lib/main.js");
         var provideClass = require("sonya/lib/lib/provide-class.js");
         expect(typeof provideClass.prototype.types.fromDirectory).toBe("function");
-        var Provide = require("sonya/lib/provide.js");
-        expect(Provide.fromDirectory).toBeDefined();
+        var Sonya = require("sonya");
+        //var Provide = require("sonya/lib/provide.js");
+        expect(Sonya.Provide.fromDirectory).toBeDefined();
     });
 
     /*it("should be able to get options", function(){
