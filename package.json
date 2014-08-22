@@ -1,6 +1,6 @@
 {
   "name": "sonya-from-directory",
-  "version": "0.0.4",
+  "version": "0.0.5",
   "description": "A provider for Sonya that is able to get modules from a directory",
   "main": "./lib/main.js",
   "scripts": {
@@ -15,7 +15,7 @@
   "license": "MIT",
   "dependencies": {
     "glob": "^4.0.4",
-    "sonya": ">=0.0.12"
+    "sonya": ">=0.0.18"
   },
   "devDependencies": {
     "grunt": "^0.4.5",
